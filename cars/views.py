@@ -4,12 +4,38 @@ from . import models
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from orders.models import OrderModel, OrderItemModel
+from django.views.generic import CreateView, DetailView
+from django.utils.decorators import method_decorator
+from users.models import CarModel
+from users.forms import CommentForm
 # Create your views here.
 
 
-def car_details(request, id):
-    car = models.CarModel.objects.get(pk=id)
-    return render(request, "car_details.html", {"car": car})
+class CarDetailsView(DetailView):
+    model = CarModel
+    template_name = "car_details.html"
+    pk_url_kwarg = "id"
+
+    def post(self, request, *args, **kwargs):
+        comment_form = CommentForm(data=self.request.POST)
+        car = self.get_object()
+        if comment_form.is_valid():
+            new_comment = comment_form.save(commit=False)
+            new_comment.email = self.request.user.email
+            new_comment.car = car
+            new_comment.save()
+            messages.success(request, "Thanks for your comment")
+        return self.get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        car = self.object
+        comments = car.comments.order_by('-createdAt')
+        comment_form = CommentForm()
+        context['car'] = car
+        context['comments'] = comments
+        context['comment_form'] = comment_form
+        return context
 
 
 @login_required

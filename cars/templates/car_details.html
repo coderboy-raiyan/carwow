@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{%load crispy_forms_tags%}
 
 {% block content %}
    <section class="">
@@ -21,6 +22,29 @@
               </div>
         </div>
    
-        
+        <div class="container">
+                      {% comment %} Comments  {% endcomment %}
+          <div class="my-5 py-3 border rounded shadow-sm bg-white">
+            <h5 class="text-center fw-bold">Total Comments : {{comments | length}}</h5>
+            
+            {% for comment in comments %}
+              <div class="bg-body-tertiary p-3 border mx-5 my-4 shadow rounded-2">
+                <h5 class="fw-bold">{{comment.name}}</h5>
+                <p>{{comment.content}}</p>
+                <small>{{comment.createdAt}} | <span class="text-primary">mail : {{comment.email}}</span></small>
+              </div>
+            {% endfor %}
+          </div>
+          {% comment %} comments Input {% endcomment %}
+          <div class="my-5 py-3 border rounded shadow-sm bg-white">
+            <h1 class="text-center">Add Comment</h1>
+            
+            <form method="POST" action="" class="mx-4">
+                {% csrf_token %}
+                {{comment_form|crispy}}
+                <button class="btn btn-warning" type="submit">Submit</button>
+            </form>
+          </div>
+        </div>
    </section>
 {% endblock content %}
