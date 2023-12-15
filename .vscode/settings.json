@@ -1,0 +1,7 @@
+{
+  "[html][django-html]": {
+    "editor.defaultFormatter": "django-html",
+    "editor.insertSnippets": true,
+    "editor.codeLens": true
+  }
+}

@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block styles %}
+    .card-car {
+        width:35%;
+    }
+    @media only screen and (max-width: 578px){
+        .card-car {
+            width:100%;
+        }
+    }
+{% endblock styles %}
+
+
+{% block content %}
+    {% comment %} Hero {% endcomment %}
+<section class="hero-banner bg-light py-5">
+    <div class="container">
+        <div class="row row align-items-center">
+            <div class="col-lg-5 offset-lg-1 order-lg-1">
+                <img src="https://consumer.tcimg.net/assets/_next/static/images/buying-power-xl-a1e7ea75d976086f91fe311285608514.png?auto=format&h=546.6666666666666&w=1200" class="img-fluid" alt="Web Development">
+            </div>
+            <div class="col-lg-6">
+                <h1 class="mt-3">Car buying
+                    shaped to your life</h1>
+                <p class="lead text-secondary my-5">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. Point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters.</p>
+                <a href="#" class="btn btn-outline-secondary btn-lg border">Order Now</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section>
+        {% comment %} Brand Category Section {% endcomment %}
+      <div class="container my-5 d-flex flex-wrap column-gap-4">
+        <div class="form-check border p-2 rounded">
+            <label class="form-check-label" for="flexRadioDefault2">
+                <a class="text-capitalize fw-bold text-decoration-none text-dark" href="{%url 'home' %}">All</a>
+            </label>
+          </div>
+         {% for brand in brands %}
+         <div class="form-check border p-2 rounded">
+            <label class="form-check-label" for="flexRadioDefault2">
+                <a class="text-capitalize fw-bold text-decoration-none text-dark" href="{%url 'brand_name' brand.slug %}">{{brand.brand_name}}</a>
+            </label>
+          </div>
+         {% endfor %}
+      </div>
+
+      {% comment %} Cars view point {% endcomment %}
+      <div class="container my-4">
+        <h5 class="my-4 fw-bold ">Total cars found : {{cars | length}}</h5>
+        <div class="d-flex flex-wap column-gap-4">
+           {% for car in cars %}
+                <div class="card-car shadow-sm card">
+               <div class="p-4 mx-auto">
+                <img  class="rounded w-100" src="{{car.image.url}}" class="card-img-top" alt="...">
+               </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{car.car_name}}</h5>
+                    <p class="card-text fs-6">{{car.description | truncatewords:10}}</p>
+                    <hr>
+                    <small class="fw-bold">Cash</small>
+                    <h6 class="my-2">Price : ${{car.price}}</h6>
+                    <a href="{%url 'car_details' car.id%}" type="button" class="btn btn-secondary d-block w-100">View Deal</a>
+                </div>
+                </div>
+           {% endfor %}
+           
+        </div>
+      </div>
+    </section>
+
+{% endblock content %}
