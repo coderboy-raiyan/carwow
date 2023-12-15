@@ -5,11 +5,20 @@ from .forms import SignUpForm, UpdateUserForm
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.forms import AuthenticationForm
 from django.views.generic import CreateView
+from orders.models import OrderModel, OrderItemModel
 # Create your views here.
 
 
 @login_required
 def profile(request):
+    orders = OrderModel.objects.filter(user=request.user)
+    order_list = []
+    for order in orders:
+        ordered_item = OrderItemModel.objects.get(order=order)
+        order_list.append(ordered_item)
+
+    print(order_list[0].car.car_name)
+
     if (request.method == "POST"):
         form = UpdateUserForm(request.POST, instance=request.user)
         if form.is_valid():

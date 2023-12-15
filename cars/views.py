@@ -17,22 +17,36 @@ def buy_now(request, id):
     car = models.CarModel.objects.get(pk=id)
     if (car.quantity > 0):
         car.quantity = car.quantity - 1
-        # set order
-        order = OrderModel()
-        order.user = request.user
-        order.total_amount = car.price
 
-        car.save()
-        order.save()
-        # set item
-        order_item = OrderItemModel()
-        order_item.order = order
-        order_item.car = car
-        order_item.quantity = 1
+        is_any_order_exists = OrderItemModel.objects.all().exists()
+        if is_any_order_exists:
+            find_the_car = OrderItemModel.objects.filter(car=car).exists()
 
-        order_item.save()
+            if find_the_car:
+                getCar = OrderItemModel.objects.get(car=car)
+                getCar.quantity = getCar.quantity+1
+                getCar.save()
+                messages.success(
+                    request, f"Successfully added one more of this {car.car_name} to your order.")
+                car.save()
+        else:
+            # set order
+            order = OrderModel()
+            order.user = request.user
+            order.total_amount = car.price
 
-        messages.success(request, "Order placed successfully")
+            car.save()
+            order.save()
+            # set item
+            order_item = OrderItemModel()
+            order_item.order = order
+            order_item.car = car
+            order_item.quantity = 1
+
+            order_item.save()
+
+            messages.success(request, "Order placed successfully")
+
     else:
         messages.warning(request, "Sorry order is out of stock !!")
 

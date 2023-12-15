@@ -58,7 +58,7 @@
     <main>
       <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
         <div class="container ">
-          <a class="navbar-brand">
+          <a href="{%url 'home'%}" class="navbar-brand">
             <img style="width:50%; height:50px; object-fit:contain;" src="https://i.ibb.co/mBQLhN5/logo.png" alt="">
           </a>
           <button
@@ -75,7 +75,7 @@
           <div class="collapse navbar-collapse justify-content-end " id="navbarSupportedContent">
             <ul class="navbar-nav mb-2 mb-lg-0 align-items-center">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page">Home</a>
+                <a href="{%url 'home'%}"  class="nav-link active" aria-current="page">Home</a>
               </li>
               {% if request.user.is_authenticated %}
               <li class="nav-item">
