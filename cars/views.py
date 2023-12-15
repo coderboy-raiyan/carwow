@@ -29,6 +29,23 @@ def buy_now(request, id):
                 messages.success(
                     request, f"Successfully added one more of this {car.car_name} to your order.")
                 car.save()
+            else:
+                # set order
+                order = OrderModel()
+                order.user = request.user
+                order.total_amount = car.price
+
+                car.save()
+                order.save()
+                # set item
+                order_item = OrderItemModel()
+                order_item.order = order
+                order_item.car = car
+                order_item.quantity = 1
+
+                order_item.save()
+
+                messages.success(request, "Order placed successfully")
         else:
             # set order
             order = OrderModel()

@@ -17,7 +17,9 @@ def profile(request):
         ordered_item = OrderItemModel.objects.get(order=order)
         order_list.append(ordered_item)
 
-    print(order_list[0].car.car_name)
+    total_price = 0
+    for order in order_list:
+        total_price += order.quantity * order.car.price
 
     if (request.method == "POST"):
         form = UpdateUserForm(request.POST, instance=request.user)
@@ -27,7 +29,8 @@ def profile(request):
             return redirect("profile")
     else:
         form = UpdateUserForm(instance=request.user)
-    return render(request, "profile.html", {"form": form, "type": "User Profile"})
+
+    return render(request, "profile.html", {"form": form, "type": "User Profile", "orders": order_list, "total_price": total_price})
 
 
 def sign_up(request):
