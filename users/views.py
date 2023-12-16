@@ -15,6 +15,7 @@ from django.contrib.auth.models import User
 @login_required
 def profile(request):
     orders = OrderModel.objects.filter(user=request.user)
+    print(orders)
     order_list = []
     for order in orders:
         ordered_item = OrderItemModel.objects.get(order=order)
