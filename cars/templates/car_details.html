@@ -36,15 +36,17 @@
             {% endfor %}
           </div>
           {% comment %} comments Input {% endcomment %}
+        {% if request.user.is_authenticated %}
           <div class="my-5 py-3 border rounded shadow-sm bg-white">
             <h1 class="text-center">Add Comment</h1>
             
             <form method="POST" action="" class="mx-4">
                 {% csrf_token %}
                 {{comment_form|crispy}}
-                <button class="btn btn-warning" type="submit">Submit</button>
-            </form>
-          </div>
+               <button class="btn btn-warning" type="submit">Send</button>
+              </form>
+            </div>
+          {% endif %}
         </div>
    </section>
 {% endblock content %}

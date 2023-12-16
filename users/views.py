@@ -109,7 +109,7 @@ def change_password(request):
         if form.is_valid():
             form.save()
             update_session_auth_hash(request, form.user)
-            messages.success("Password changed successfully")
+            messages.success(request, "Password changed successfully")
             return redirect("profile")
 
     else:
@@ -127,4 +127,5 @@ class UserLogoutView(LogoutView):
     template_name = "logout.html"
 
     def get_success_url(self):
+        messages.success(self.request, "Logged out successfully")
         return reverse_lazy("home")
