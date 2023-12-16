@@ -50,11 +50,28 @@ def buy_now(request, id):
 
             if find_the_car:
                 getCar = OrderItemModel.objects.get(car=car)
-                getCar.quantity = getCar.quantity+1
-                getCar.save()
-                messages.success(
-                    request, f"Successfully added one more of this {car.car_name} to your order.")
-                car.save()
+                if getCar.order.user == request.user:
+                    getCar.quantity = getCar.quantity+1
+                    getCar.save()
+                    messages.success(
+                        request, f"Successfully added one more of this {car.car_name} to your order.")
+                    car.save()
+                else:
+                    order = OrderModel()
+                    order.user = request.user
+                    order.total_amount = car.price
+
+                    car.save()
+                    order.save()
+                    # set item
+                    order_item = OrderItemModel()
+                    order_item.order = order
+                    order_item.car = car
+                    order_item.quantity = 1
+
+                    order_item.save()
+
+                    messages.success(request, "Order placed successfully")
             else:
                 # set order
                 order = OrderModel()

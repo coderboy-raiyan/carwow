@@ -19,10 +19,13 @@
         <form method="POST" action="" style='width:50%; margin:auto'>
             {% csrf_token %}
             {{form|crispy}}
+            <small class="d-block py-2">
+              Change your password here : <a href="{%url 'change_password'%}">Change Password</a>
+            </small>
             <button class="btn btn-warning" type="submit">save</button>
         </form>
 
-        {% if orders.length != 0  %}
+        {% if isOrderExists != 0  %}
   {% comment %} Order History {% endcomment %}
   <div class="container my-4">
     <h2 class="text-center fw-bold border-bottom pb-2">Order history</h2>

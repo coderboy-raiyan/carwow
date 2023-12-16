@@ -3,9 +3,12 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import SignUpForm, UpdateUserForm
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, SetPasswordForm
 from django.views.generic import CreateView
 from orders.models import OrderModel, OrderItemModel
+from django.contrib.auth.views import LogoutView
+from django.urls import reverse_lazy
+from django.contrib.auth.models import User
 # Create your views here.
 
 
@@ -29,8 +32,34 @@ def profile(request):
             return redirect("profile")
     else:
         form = UpdateUserForm(instance=request.user)
+    print(order_list)
+    isOrderExists = len(order_list)
+    return render(request, "profile.html", {"form": form, "type": "User Profile", "orders": order_list, "isOrderExists": isOrderExists, "total_price": total_price})
 
-    return render(request, "profile.html", {"form": form, "type": "User Profile", "orders": order_list, "total_price": total_price})
+
+class UserSignUpView(CreateView):
+    model = User
+    form_class = SignUpForm
+    template_name = 'sign_up.html'
+    success_url = reverse_lazy("sign_in")
+
+    def get(self, request, *args, **kwargs):
+        if self.request.user.is_authenticated:
+            return redirect("home")
+        return super().get(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        messages.success(self.request, "Signed up successfully")
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.warning(self.request, "Invalid user credentials")
+        return super().form_invalid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["type"] = "Sign up"
+        return context
 
 
 def sign_up(request):
@@ -71,6 +100,29 @@ def sign_in(request):
     return render(request, "sign_in.html", {"form": form, "type": "Sign in"})
 
 
+@login_required
+def change_password(request):
+    if (request.method == "POST"):
+        form = SetPasswordForm(request.user, data=request.POST)
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, form.user)
+            messages.success("Password changed successfully")
+            return redirect("profile")
+
+    else:
+        form = SetPasswordForm(user=request.user)
+
+    return render(request, "change_password.html", {"form": form, "type": "Change Password"})
+
+
 def user_logout(request):
     logout(request)
     return redirect("home")
+
+
+class UserLogoutView(LogoutView):
+    template_name = "logout.html"
+
+    def get_success_url(self):
+        return reverse_lazy("home")
