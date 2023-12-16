@@ -59,7 +59,7 @@
                       <p class="text-muted mb-0 small">Qty : {{order.quantity}}</p>
                     </div>
                     <div class="col-md-3 text-center d-flex justify-content-center align-items-center">
-                      <p class="text-muted mb-0 small">Price: ${{order.car.price}}</p>
+                      <p class="text-muted mb-0 small">Price: <span id="order-price">${{order.car.price}}</span></p>
                     </div>
                   </div>
                   <hr class="mb-4" style="background-color: #e0e0e0; opacity: 1;">
@@ -85,7 +85,7 @@
   
               <div class="d-flex justify-content-between pt-2">
                 <p class="fw-bold mb-0">Order Details</p>
-                <p class="text-muted mb-0"><span class="fw-bold me-4">Total</span>${{total_price}}</p>
+                <p  class="text-muted mb-0"><span class="fw-bold me-4">Total</span><span id="order-price">${{total_price}}</span></p>
               </div>
 
   
@@ -98,7 +98,7 @@
             <div class="card-footer border-0 px-4 py-5"
               style="background-color: #a8729a; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
               <h5 class="d-flex align-items-center justify-content-end text-white text-uppercase mb-0">Total
-                : <span class="h2 mb-0 ms-2">${{total_price}}</span></h5>
+                : <span id="order-price" class="h2 mb-0 ms-2">${{total_price}}</span></h5>
             </div>
           
           </div>
@@ -110,4 +110,5 @@
       
       </div>
   </section>
+ 
 {% endblock %}

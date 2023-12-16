@@ -75,7 +75,7 @@
                     <p class="card-text fs-6">{{car.description | truncatewords:10}}</p>
                     <hr>
                     <small class="fw-bold text-primary">{{car.brand.brand_name}}</small>
-                    <h6 class="my-2">Price : ${{car.price}}</h6>
+                    <h6 class="my-2">Price : <span id="order-price">${{car.price}}</span></h6>
                     <a href="{%url 'car_details' car.id%}" type="button" class="btn btn-secondary d-block w-100">View Deal</a>
                 </div>
                 </div>
